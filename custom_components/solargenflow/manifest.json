@@ -1,9 +1,9 @@
 {
   "domain": "solargenflow",
   "name": "SolarGenflow",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "config_flow": true,
   "iot_class": "local_polling",
-  "documentation": "https://github.com/pyrots/solargenflow",
+  "documentation": "https://github.com/solargenflow",
   "integration_type": "hub"
 }

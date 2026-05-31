@@ -11,32 +11,33 @@
     "step": {
       "init": {
         "title": "Configuration des sources SolarGenflow",
-        "description": "Choisissez les capteurs Home Assistant qui représentent les flux réels de votre installation.",
         "data": {
-          "pv_entity": "Production solaire (W)",
-          "edf_power_entity": "Puissance réseau EDF / compteur (W)",
-          "battery_soc_entity": "État de charge batterie (%)",
-          "battery_charge_entity": "Puissance de charge batterie (W)",
+          "pv_entity":                "Production solaire (W)",
+          "edf_power_entity":         "Compteur réseau EDF / Shelly (W)",
+          "battery_soc_entity":       "État de charge batterie (%)",
+          "battery_charge_entity":    "Puissance de charge batterie (W)",
           "battery_discharge_entity": "Puissance de décharge batterie (W)",
-          "battery_net_entity": "Puissance nette batterie signée (W)",
-          "grid_import_entity": "Import réseau Jackery (W)",
-          "grid_export_entity": "Export réseau / sortie AC Jackery (W)",
-          "backup_entity": "Puissance sortie EPS / backup (W)",
-          "solar_energy_entity": "Énergie solaire totale (kWh)",
-          "home_entity": "Consommation maison directe (W)"
+          "battery_net_entity":       "Puissance nette batterie signée (W)",
+          "grid_import_entity":       "Import réseau Jackery (W)",
+          "grid_export_entity":       "Export vers réseau Jackery (W)",
+          "solarvault_output_entity": "Sortie AC SolarVault → Maison (W)",
+          "solarvault_input_entity":  "Entrée AC SolarVault ← EDF (W)",
+          "backup_entity":            "Puissance sortie EPS / backup (W)",
+          "solar_energy_entity":      "Énergie solaire totale (kWh)"
         },
         "data_description": {
-          "pv_entity": "Ex : sensor.jackery_solar_power",
-          "edf_power_entity": "Ex : sensor.shellypro3em_ac15187c8e84_phase_a_puissance",
-          "battery_soc_entity": "Ex : sensor.jackery_battery_soc",
-          "battery_charge_entity": "Ex : sensor.jackery_battery_charge_power",
+          "pv_entity":                "Ex : sensor.jackery_solar_power",
+          "edf_power_entity":         "Ex : sensor.shellypro3em_ac15187c8e84_phase_a_puissance",
+          "battery_soc_entity":       "Ex : sensor.jackery_battery_soc",
+          "battery_charge_entity":    "Ex : sensor.jackery_battery_charge_power",
           "battery_discharge_entity": "Ex : sensor.jackery_battery_discharge_power",
-          "battery_net_entity": "Ex : sensor.jackery_battery_net_power (valeur signée)",
-          "grid_import_entity": "Ex : sensor.jackery_grid_import_power",
-          "grid_export_entity": "Ex : sensor.jackery_grid_export_power",
-          "backup_entity": "Ex : sensor.jackery_eps_output_power",
-          "solar_energy_entity": "Ex : sensor.jackery_solar_energy",
-          "home_entity": "Ex : sensor.jackery_home_power"
+          "battery_net_entity":       "Ex : sensor.jackery_battery_net_power (valeur signée)",
+          "grid_import_entity":       "Ex : sensor.jackery_grid_import_power",
+          "grid_export_entity":       "Ex : sensor.jackery_grid_export_power",
+          "solarvault_output_entity": "Ex : sensor.jackery_home_power",
+          "solarvault_input_entity":  "Ex : sensor.jackery_grid_import_power",
+          "backup_entity":            "Ex : sensor.jackery_eps_output_power",
+          "solar_energy_entity":      "Ex : sensor.jackery_solar_energy"
         }
       }
     }
