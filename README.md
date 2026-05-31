@@ -4,7 +4,7 @@
 
 SolarGenflow est une intégration custom pour Home Assistant qui centralise et calcule les flux d'énergie de votre installation solaire. Elle agrège les données de votre batterie Jackery, de vos panneaux PV et de votre compteur réseau (Shelly Pro 3EM) pour exposer des capteurs cohérents, prêts pour le tableau de bord énergie de Home Assistant.
 
-![Version](https://img.shields.io/badge/version-0.2.2-blue)
+![Version](https://img.shields.io/badge/version-0.2.1-blue)
 ![HACS](https://img.shields.io/badge/HACS-custom-orange)
 ![Licence](https://img.shields.io/badge/licence-MIT-green)
 
