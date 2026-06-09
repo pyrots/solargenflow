@@ -27,6 +27,42 @@ class SolarGenflowEngine:
         ), 0)
 
     @property
+    def pv1_power(self):
+        return max(self.get_float_state(
+            self.get_option_entity(
+                "pv1_entity",
+                "sensor.jackery_solar_power_pv1"
+            )
+        ), 0)
+
+    @property
+    def pv2_power(self):
+        return max(self.get_float_state(
+            self.get_option_entity(
+                "pv2_entity",
+                "sensor.jackery_solar_power_pv2"
+            )
+        ), 0)
+
+    @property
+    def pv3_power(self):
+        return max(self.get_float_state(
+            self.get_option_entity(
+                "pv3_entity",
+                "sensor.jackery_solar_power_pv3"
+            )
+        ), 0)
+
+    @property
+    def pv4_power(self):
+        return max(self.get_float_state(
+            self.get_option_entity(
+                "pv4_entity",
+                "sensor.jackery_solar_power_pv4"
+            )
+        ), 0)
+
+    @property
     def edf_power(self):
         """Puissance mesurée par le compteur EDF/Shelly (W, toujours >= 0)."""
         return max(self.get_float_state(
@@ -60,7 +96,7 @@ class SolarGenflowEngine:
         )
         if raw > 0:
             return raw
-        # Fallback : dériver depuis battery_net_power si négatif
+
         net = self.battery_net_power
         return max(-net, 0)
 
@@ -75,37 +111,55 @@ class SolarGenflowEngine:
         )
         if raw > 0:
             return raw
-        # Fallback : dériver depuis battery_net_power si positif
+
         net = self.battery_net_power
         return max(net, 0)
 
     @property
     def battery_soc(self):
         return self.get_float_state(
-            self.get_option_entity("battery_soc_entity", "sensor.jackery_battery_soc")
+            self.get_option_entity(
+                "battery_soc_entity",
+                "sensor.jackery_battery_soc"
+            )
         )
 
     # ─── Flux SolarVault ─────────────────────────────────────────────────────
 
     @property
     def solarvault_ac_output(self):
-        """Ce que la SolarVault envoie vers la maison (W, >= 0).
-        Capteur Jackery : home_power ou grid_export_power selon le câblage.
-        """
-        return max(self.get_float_state(
-            self.get_option_entity(
-                "solarvault_output_entity", "sensor.jackery_home_power"
-            )
-        ), 0)
+        """Ce que la SolarVault envoie vers la maison (W, >= 0)."""
+        return max(
+            self.get_float_state(
+                self.get_option_entity(
+                    "solarvault_output_entity",
+                    "sensor.jackery_home_power"
+                )
+            ),
+            0,
+        )
 
     @property
     def solarvault_ac_input(self):
         """Ce que la SolarVault reçoit depuis le réseau EDF pour se charger (W, >= 0)."""
-        return max(self.get_float_state(
-            self.get_option_entity(
-                "solarvault_input_entity", "sensor.jackery_grid_import_power"
-            )
-        ), 0)
+        return max(
+            self.get_float_state(
+                self.get_option_entity(
+                    "solarvault_input_entity",
+                    "sensor.jackery_grid_import_power"
+                )
+            ),
+            0,
+        )
+
+    @property
+    def solarvault_ac_power(self):
+        """Puissance AC nette SolarVault.
+
+        > 0 : la SolarVault alimente la maison
+        < 0 : la SolarVault se recharge depuis le réseau
+        """
+        return self.solarvault_ac_output - self.solarvault_ac_input
 
     # ─── Réseau ───────────────────────────────────────────────────────────────
 
@@ -116,12 +170,11 @@ class SolarGenflowEngine:
 
     @property
     def grid_export_power(self):
-        """Export vers le réseau (W, >= 0) — capteur Jackery dédié.
-        NE PAS confondre avec solarvault_ac_output (= conso maison).
-        """
+        """Export vers le réseau (W, >= 0) — capteur Jackery dédié."""
         return max(self.get_float_state(
             self.get_option_entity(
-                "grid_export_entity", "sensor.jackery_grid_export_power"
+                "grid_export_entity",
+                "sensor.jackery_grid_export_power"
             )
         ), 0)
 
@@ -129,16 +182,13 @@ class SolarGenflowEngine:
 
     @property
     def home_power(self):
-        """Consommation maison réelle (W).
-        = Ce que fournit la SolarVault à la maison + appoint réseau EDF.
-        Si solarvault_ac_output non configuré, on calcule :
-          PV - export_réseau - charge_batterie + décharge_batterie + import_réseau
-        """
+        """Consommation maison réelle (W)."""
         sv_out = self.solarvault_ac_output
         edf = self.edf_power
+
         if sv_out > 0:
             return sv_out + edf
-        # Calcul par bilan énergétique
+
         return max(
             self.pv_power
             - self.grid_export_power
@@ -158,7 +208,8 @@ class SolarGenflowEngine:
     def backup_output_power(self):
         return max(self.get_float_state(
             self.get_option_entity(
-                "backup_entity", "sensor.jackery_eps_output_power"
+                "backup_entity",
+                "sensor.jackery_eps_output_power"
             )
         ), 0)
 
@@ -166,6 +217,7 @@ class SolarGenflowEngine:
     def solar_energy_total(self):
         return max(self.get_float_state(
             self.get_option_entity(
-                "solar_energy_entity", "sensor.jackery_solar_energy"
+                "solar_energy_entity",
+                "sensor.jackery_solar_energy"
             )
         ), 0)
