@@ -6,6 +6,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 
 ---
+## [0.3.2] — 2026-06-10
+- corrections Home Load et Battery Net
+
+---
 
 ## [0.3.1] — 2026-06-10
 
