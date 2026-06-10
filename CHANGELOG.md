@@ -9,6 +9,28 @@ Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 
 ---
 
+## [0.3.5] — 2026-06-10
+
+### Ajouté
+
+- Support des traductions natives Home Assistant.
+- Ajout du dossier `translations/`.
+- Ajout des traductions françaises (`fr.json`).
+- Ajout des traductions anglaises (`en.json`).
+
+### Modifié
+
+- Migration des capteurs vers le système `translation_key` de Home Assistant.
+- Préparation de l'intégration pour l'affichage automatique des noms selon la langue configurée par l'utilisateur.
+
+### Internationalisation
+
+- Français : noms complets des capteurs SolarGenflow.
+- Anglais : noms complets des capteurs SolarGenflow.
+- Base prête pour l'ajout d'autres langues ultérieurement.
+
+---
+
 ## [0.3.4] — 2026-06-10
 
 ### Ajouté
@@ -176,3 +198,4 @@ Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 - Intégration Jackery + Shelly Pro 3EM
 
 
+---
