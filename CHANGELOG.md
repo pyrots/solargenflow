@@ -5,6 +5,37 @@ Toutes les modifications notables de SolarGenflow sont documentées ici.
 Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 
+
+---
+
+## [0.3.3] — 2026-06-10
+
+### Corrigé
+
+- **`Grid Export Power` toujours faux** — Le capteur Jackery `grid_export_power`
+  représente en réalité la puissance AC sortant de la SolarVault vers la maison,
+  pas un vrai export vers EDF. Il remontait systématiquement des valeurs erronées
+  (ex. 281 W alors qu'aucune injection réseau n'avait lieu).
+  Désormais `grid_export_power = 0` par défaut. Il ne sera non nul que si un
+  capteur d'export dédié (Shelly mesurant l'injection) est explicitement configuré
+  dans les options.
+
+- **`Home Load` — formule simplifiée et universelle** — Remplacement de la logique
+  conditionnelle à deux branches (sv_out > 0 / sv_out == 0) par une formule unique :
+  ```
+  Home Load = Grid Import + SolarVault AC Output + Backup Output
+  ```
+  Chaque source est mesurée indépendamment, la formule est correcte dans tous
+  les scénarios : SolarVault active, inactive, ou en recharge réseau.
+  Validation sur capture réelle : 296 + 281 + 0 = 577 W vs 542 W Jackery,
+  écart résiduel dû uniquement à la latence de polling entre les trois sources.
+
+### Modifié
+
+- `grid_export_power` : ne lit plus `sensor.jackery_grid_export_power` par défaut.
+  L'option `grid_export_entity` reste disponible pour brancher un vrai compteur
+  d'export si l'installation évolue vers l'injection réseau.
+
 ---
 ## [0.3.2] — 2026-06-10
 - corrections Home Load et Battery Net
@@ -68,3 +99,5 @@ Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 - Première version publiée sur GitHub
 - 11 capteurs initiaux
 - Intégration Jackery + Shelly Pro 3EM
+
+

@@ -52,7 +52,9 @@ class SolarGenflowEngine:
 
     @property
     def edf_power(self):
-        """Puissance mesurée par le compteur EDF/Shelly (W, toujours >= 0)."""
+        """Puissance mesurée par le compteur EDF/Shelly (W, >= 0).
+        Source de vérité pour l'import réseau.
+        """
         return max(self.get_float_state(
             self.get_option_entity(
                 "edf_power_entity",
@@ -88,7 +90,6 @@ class SolarGenflowEngine:
         if raw > 0:
             return raw
 
-        # Fallback sur battery_net_power : positif = charge
         net = self.battery_net_power
         return max(net, 0)
 
@@ -107,7 +108,6 @@ class SolarGenflowEngine:
         if raw > 0:
             return raw
 
-        # Fallback sur battery_net_power : négatif = décharge
         net = self.battery_net_power
         return max(-net, 0)
 
@@ -123,7 +123,9 @@ class SolarGenflowEngine:
 
     @property
     def solarvault_ac_output(self):
-        """Ce que la SolarVault envoie vers la maison (W, >= 0)."""
+        """Puissance envoyée par la SolarVault vers la maison (W, >= 0).
+        Source : sensor.jackery_home_power
+        """
         return max(self.get_float_state(
             self.get_option_entity(
                 "solarvault_output_entity", "sensor.jackery_home_power"
@@ -132,7 +134,9 @@ class SolarGenflowEngine:
 
     @property
     def solarvault_ac_input(self):
-        """Ce que la SolarVault tire du réseau EDF pour se recharger (W, >= 0)."""
+        """Puissance que la SolarVault tire du réseau EDF pour se recharger (W, >= 0).
+        Source : sensor.jackery_grid_import_power
+        """
         return max(self.get_float_state(
             self.get_option_entity(
                 "solarvault_input_entity", "sensor.jackery_grid_import_power"
@@ -151,17 +155,23 @@ class SolarGenflowEngine:
 
     @property
     def grid_import_power(self):
-        """Import depuis le réseau EDF (W, >= 0) — source Shelly (vérité terrain)."""
+        """Import depuis le réseau EDF (W, >= 0).
+        Source de vérité : Shelly Pro 3EM.
+        """
         return self.edf_power
 
     @property
     def grid_export_power(self):
-        """Export vers le réseau (W, >= 0) — capteur Jackery dédié."""
-        return max(self.get_float_state(
-            self.get_option_entity(
-                "grid_export_entity", "sensor.jackery_grid_export_power"
-            )
-        ), 0)
+        """Export vers le réseau EDF (W, >= 0).
+        Toujours 0 : l'installation est en autoconsommation sans injection réseau.
+        Le capteur Jackery 'Grid Export Power' représente en réalité la puissance
+        AC sortant de la SolarVault vers la maison — ce n'est pas un export EDF.
+        Ce capteur sera activé uniquement si un compteur d'export dédié est configuré.
+        """
+        export_entity = self.get_option_entity("grid_export_entity")
+        if not export_entity:
+            return 0
+        return max(self.get_float_state(export_entity), 0)
 
     # ─── Consommation maison ──────────────────────────────────────────────────
 
@@ -169,29 +179,18 @@ class SolarGenflowEngine:
     def home_power(self):
         """Consommation maison réelle (W).
 
-        Deux cas :
-        1. SolarVault injecte dans la maison (sv_out > 0) :
-           maison = SolarVault AC Output + réseau EDF
+        Formule : Grid Import + SolarVault AC Output + Backup Output
+        - Grid Import  : ce que fournit EDF (mesuré par Shelly)
+        - SolarVault AC Output : ce que la SolarVault injecte dans la maison
+        - Backup Output : sortie EPS si active
 
-        2. SolarVault inactive ou en recharge (sv_out == 0) :
-           maison = PV - export - charge_batt + décharge_batt + EDF - sv_input
-           On soustrait solarvault_ac_input car la SolarVault tire du réseau
-           pour se recharger : ces watts ne sont pas de la consommation maison.
+        Cette formule est valide dans tous les cas (SolarVault active,
+        inactive ou en recharge) car chaque source est mesurée indépendamment.
         """
-        sv_out = self.solarvault_ac_output
-        sv_in = self.solarvault_ac_input
-        edf = self.edf_power
-
-        if sv_out > 0:
-            return sv_out + edf
-
         return max(
-            self.pv_power
-            - self.grid_export_power
-            - self.battery_charge_power
-            + self.battery_discharge_power
-            + edf
-            - sv_in,
+            self.grid_import_power
+            + self.solarvault_ac_output
+            + self.backup_output_power,
             0,
         )
 
