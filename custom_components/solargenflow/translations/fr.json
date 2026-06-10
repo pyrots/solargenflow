@@ -1,0 +1,27 @@
+
+
+{
+  "entity": {
+    "sensor": {
+      "pv_power": {"name": "Production Solaire"},
+      "pv1_power": {"name": "Production Solaire PV1"},
+      "pv2_power": {"name": "Production Solaire PV2"},
+      "pv3_power": {"name": "Production Solaire PV3"},
+      "pv4_power": {"name": "Production Solaire PV4"},
+      "solarvault_ac_power": {"name": "Puissance AC SolarVault"},
+      "solarvault_ac_output": {"name": "Sortie AC SolarVault"},
+      "solarvault_ac_input": {"name": "Entrée AC SolarVault"},
+      "home_power": {"name": "Puissance Maison"},
+      "domestic_load_power": {"name": "Charges Domestiques"},
+      "home_load_total": {"name": "Consommation Totale"},
+      "battery_charge_power": {"name": "Puissance Charge Batterie"},
+      "battery_discharge_power": {"name": "Puissance Décharge Batterie"},
+      "battery_net_power": {"name": "Puissance Nette Batterie"},
+      "grid_import_power": {"name": "Import Réseau"},
+      "grid_export_power": {"name": "Export Réseau"},
+      "backup_output_power": {"name": "Puissance Secours EPS"},
+      "battery_soc": {"name": "État de Charge Batterie"},
+      "solar_energy_total": {"name": "Énergie Solaire Totale"}
+    }
+  }
+}

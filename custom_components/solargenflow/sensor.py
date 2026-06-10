@@ -18,6 +18,7 @@ SENSOR_MAPPING = {
     "pv_power": {
         "engine_attr": "pv_power",
         "name": "PV Power",
+        "translation_key": "pv_power",
         "icon": "mdi:solar-power",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -26,6 +27,7 @@ SENSOR_MAPPING = {
     "pv1_power": {
         "engine_attr": "pv1_power",
         "name": "PV1 Power",
+        "translation_key": "pv1_power",
         "icon": "mdi:solar-power",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -34,6 +36,7 @@ SENSOR_MAPPING = {
     "pv2_power": {
         "engine_attr": "pv2_power",
         "name": "PV2 Power",
+        "translation_key": "pv2_power",
         "icon": "mdi:solar-power",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -42,6 +45,7 @@ SENSOR_MAPPING = {
     "pv3_power": {
         "engine_attr": "pv3_power",
         "name": "PV3 Power",
+        "translation_key": "pv3_power",
         "icon": "mdi:solar-power",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -50,6 +54,7 @@ SENSOR_MAPPING = {
     "pv4_power": {
         "engine_attr": "pv4_power",
         "name": "PV4 Power",
+        "translation_key": "pv4_power",
         "icon": "mdi:solar-power",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -57,16 +62,18 @@ SENSOR_MAPPING = {
     },
     
     "solarvault_ac_power": {
-    "engine_attr": "solarvault_ac_power",
-    "name": "SolarVault AC Power",
-    "icon": "mdi:transmission-tower",
-    "unit": UnitOfPower.WATT,
-    "device_class": "power",
-    "state_class": "measurement",
+        "engine_attr": "solarvault_ac_power",
+        "name": "SolarVault AC Power",
+        "translation_key": "solarvault_ac_power",
+        "icon": "mdi:transmission-tower",
+        "unit": UnitOfPower.WATT,
+        "device_class": "power",
+        "state_class": "measurement",
     },
     "solarvault_ac_output": {
         "engine_attr": "solarvault_ac_output",
         "name": "SolarVault AC Output",
+        "translation_key": "solarvault_ac_output",
         "icon": "mdi:home-import-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -75,6 +82,7 @@ SENSOR_MAPPING = {
     "solarvault_ac_input": {
         "engine_attr": "solarvault_ac_input",
         "name": "SolarVault AC Input",
+        "translation_key": "solarvault_ac_input",
         "icon": "mdi:home-export-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -83,6 +91,7 @@ SENSOR_MAPPING = {
     "home_power": {
         "engine_attr": "home_power",
         "name": "Home Power",
+        "translation_key": "home_power",
         "icon": "mdi:home-import-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -91,6 +100,7 @@ SENSOR_MAPPING = {
     "domestic_load_power": {
         "engine_attr": "domestic_load_power",
         "name": "Domestic Load Power",
+        "translation_key": "domestic_load_power",
         "icon": "mdi:home-lightning-bolt",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -99,6 +109,7 @@ SENSOR_MAPPING = {
     "home_load_total": {
         "engine_attr": "home_load_total",
         "name": "Home Load Total",
+        "translation_key": "home_load_total",
         "icon": "mdi:home-lightning-bolt-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -107,6 +118,7 @@ SENSOR_MAPPING = {
     "battery_charge_power": {
         "engine_attr": "battery_charge_power",
         "name": "Battery Charge Power",
+        "translation_key": "battery_charge_power",
         "icon": "mdi:battery-charging",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -115,6 +127,7 @@ SENSOR_MAPPING = {
     "battery_discharge_power": {
         "engine_attr": "battery_discharge_power",
         "name": "Battery Discharge Power",
+        "translation_key": "battery_discharge_power",
         "icon": "mdi:battery-minus",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -124,6 +137,7 @@ SENSOR_MAPPING = {
     "battery_net_power": {
         "engine_attr": "battery_net_power",
         "name": "Battery Net Power",
+        "translation_key": "battery_net_power",
         "icon": "mdi:battery-arrow-up-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -132,6 +146,7 @@ SENSOR_MAPPING = {
     "grid_import_power": {
         "engine_attr": "grid_import_power",
         "name": "Grid Import Power",
+        "translation_key": "grid_import_power",
         "icon": "mdi:transmission-tower-import",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -140,6 +155,7 @@ SENSOR_MAPPING = {
     "grid_export_power": {
         "engine_attr": "grid_export_power",
         "name": "Grid Export Power",
+        "translation_key": "grid_export_power",
         "icon": "mdi:transmission-tower-export",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -148,6 +164,7 @@ SENSOR_MAPPING = {
     "backup_output_power": {
         "engine_attr": "backup_output_power",
         "name": "Backup Output Power",
+        "translation_key": "backup_output_power",
         "icon": "mdi:power-socket-eu",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -156,6 +173,7 @@ SENSOR_MAPPING = {
     "battery_soc": {
         "engine_attr": "battery_soc",
         "name": "Battery SOC",
+        "translation_key": "battery_soc",
         "icon": "mdi:battery",
         "unit": PERCENTAGE,
         "device_class": "battery",
@@ -164,6 +182,7 @@ SENSOR_MAPPING = {
     "solar_energy_total": {
         "engine_attr": "solar_energy_total",
         "name": "Solar Energy Total",
+        "translation_key": "solar_energy_total",
         "icon": "mdi:solar-power",
         "unit": UnitOfEnergy.KILO_WATT_HOUR,
         "device_class": "energy",
@@ -212,7 +231,7 @@ class SolarGenflowEngineSensor(SolarGenflowBaseEntity):
         self.config = config
 
         self._attr_unique_id = f"solargenflow_{key}"
-        self._attr_name = config["name"]
+        self._attr_translation_key = config["translation_key"]
         self._attr_icon = config["icon"]
         self._attr_native_unit_of_measurement = config["unit"]
         self._attr_device_class = config["device_class"]
