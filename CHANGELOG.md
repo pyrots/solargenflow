@@ -6,7 +6,82 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 Versionnage selon [Semantic Versioning](https://semver.org/lang/fr/).
 
 
+
 ---
+
+## [0.3.4] — 2026-06-10
+
+### Ajouté
+
+- Nouveau capteur **Home Power**.
+  Source officielle : `sensor.jackery_home_power`.
+  Représente le flux AC entre la SolarVault et la maison.
+
+- Nouveau capteur **Domestic Load Power**.
+  Calcul :
+  ```
+  Domestic Load Power = Grid Import + Home Power
+  ```
+  Correspond aux « Charges domestiques » affichées dans l'application Jackery.
+
+- Nouvelle option de configuration `home_power_entity`.
+  Valeur par défaut :
+  ```
+  sensor.jackery_home_power
+  ```
+
+### Modifié
+
+- **SolarVault AC Output** redéfini.
+
+  Ancien comportement :
+  ```
+  SolarVault AC Output = sensor.jackery_home_power
+  ```
+
+  Nouveau calcul :
+  ```
+  SolarVault AC Output = Home Power + Backup Output
+  ```
+
+  Le capteur représente désormais la sortie AC totale réelle de la SolarVault.
+
+- **Home Load Total** redéfini.
+
+  Ancien comportement :
+  ```
+  Home Load Total = Home Power
+  ```
+
+  Nouveau calcul :
+  ```
+  Home Load Total = Domestic Load Power + Backup Output
+  ```
+
+  Le capteur représente désormais la consommation totale du système, y compris les charges alimentées via la sortie EPS.
+
+- Clarification complète de la terminologie énergétique.
+
+  Distinction officielle entre :
+  - Home Power
+  - Domestic Load Power
+  - Home Load Total
+  - SolarVault AC Output
+  - Backup Output
+
+### Corrigé
+
+- Suppression des valeurs négatives erronées de `Home Power`.
+
+  Analyse sur plus de 165 000 mesures :
+  les valeurs négatives représentaient environ 1,7 % des échantillons et correspondaient à des glitches MQTT très courts.
+
+  Désormais :
+  ```
+  Home Power = max(home_power, 0)
+  ```
+
+- Amélioration de la cohérence des flux SolarVault / Maison / EPS afin d'obtenir des calculs conformes aux valeurs observées simultanément dans l'application Jackery, Home Assistant et le Shelly Pro 3EM.
 
 ## [0.3.3] — 2026-06-10
 

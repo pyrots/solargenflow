@@ -82,7 +82,15 @@ SENSOR_MAPPING = {
     },
     "home_power": {
         "engine_attr": "home_power",
-        "name": "Home Load",
+        "name": "Home Power",
+        "icon": "mdi:home-import-outline",
+        "unit": UnitOfPower.WATT,
+        "device_class": "power",
+        "state_class": "measurement",
+    },
+    "domestic_load_power": {
+        "engine_attr": "domestic_load_power",
+        "name": "Domestic Load Power",
         "icon": "mdi:home-lightning-bolt",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
@@ -91,7 +99,7 @@ SENSOR_MAPPING = {
     "home_load_total": {
         "engine_attr": "home_load_total",
         "name": "Home Load Total",
-        "icon": "mdi:home-lightning-bolt",
+        "icon": "mdi:home-lightning-bolt-outline",
         "unit": UnitOfPower.WATT,
         "device_class": "power",
         "state_class": "measurement",

@@ -4,7 +4,7 @@
 
 SolarGenflow est une intégration custom pour Home Assistant qui centralise et calcule les flux d'énergie de votre installation solaire. Elle agrège les données de votre batterie Jackery, de vos panneaux PV et de votre compteur réseau (Shelly Pro 3EM) pour exposer des capteurs cohérents, prêts pour le tableau de bord énergie de Home Assistant.
 
-![Version](https://img.shields.io/badge/version-0.3.3-blue)
+![Version](https://img.shields.io/badge/version-0.3.4-blue)
 ![HACS](https://img.shields.io/badge/HACS-custom-orange)
 ![Licence](https://img.shields.io/badge/licence-MIT-green)
 
@@ -12,7 +12,7 @@ SolarGenflow est une intégration custom pour Home Assistant qui centralise et c
 
 ## Pourquoi SolarGenflow ?
 
-Les intégrations Jackery et Shelly exposent chacune leurs propres capteurs, mais sans cohérence entre elles. SolarGenflow joue le rôle de moteur de flux : il lit ces capteurs, corrige les valeurs signées, calcule les flux manquants (charge batterie, consommation maison, export réseau) et les expose sous forme d'entités unifiées et fiables.
+Les intégrations Jackery et Shelly exposent chacune leurs propres capteurs, mais sans cohérence entre elles. SolarGenflow joue le rôle de moteur de flux : il lit ces capteurs, corrige les valeurs signées, calcule les flux manquants (charge batterie, flux SolarVault, charges domestiques et consommation totale) et les expose sous forme d'entités unifiées et fiables.
 
 Le nom résume la philosophie :
 - **Solar** — la source : production photovoltaïque
@@ -22,6 +22,69 @@ Le nom résume la philosophie :
 ---
 
 ## Changelog
+
+## [0.3.4] — 2026-06-10
+
+### Ajouté
+
+- Nouveau capteur **Home Power**.
+  Source : `sensor.jackery_home_power`.
+  Représente le flux AC envoyé par la SolarVault vers la maison.
+
+- Nouveau capteur **Domestic Load Power**.
+  Calcul :
+  ```
+  Domestic Load Power = Grid Import Power + Home Power
+  ```
+  Correspond aux « Charges domestiques » affichées dans l'application Jackery.
+
+- Nouvelle option de configuration :
+  ```
+  home_power_entity
+  ```
+
+### Modifié
+
+- **SolarVault AC Output** redéfini.
+
+  Ancien comportement :
+  ```
+  SolarVault AC Output = sensor.jackery_home_power
+  ```
+
+  Nouveau comportement :
+  ```
+  SolarVault AC Output = Home Power + Backup Output
+  ```
+
+- **Home Load Total** redéfini.
+
+  Ancien comportement :
+  ```
+  Home Load Total = Home Power
+  ```
+
+  Nouveau comportement :
+  ```
+  Home Load Total = Domestic Load Power + Backup Output
+  ```
+
+- Clarification complète des flux :
+  - Home Power
+  - Domestic Load Power
+  - Home Load Total
+  - SolarVault AC Output
+  - Backup Output
+
+### Corrigé
+
+- Filtrage des glitches MQTT négatifs sur `sensor.jackery_home_power`.
+
+  ```
+  home_power = max(home_power, 0)
+  ```
+
+- Cohérence des calculs validée à partir des mesures croisées Jackery + Shelly Pro 3EM + SolarGenflow.
 
 ## [0.3.3] — 2026-06-10
 
@@ -84,7 +147,7 @@ Le nom résume la philosophie :
 
 ---
 
-## Capteurs exposés (14 entités)
+## Capteurs exposés (16 entités)
 
 | Capteur | Unité | Description |
 |---|---|---|
@@ -96,9 +159,10 @@ Le nom résume la philosophie :
 | Battery Net Power | W | Puissance nette signée (positif = charge) |
 | Grid Import Power | W | Import depuis le réseau (source Shelly) |
 | Grid Export Power | W | Export vers le réseau |
-| Home Load | W | Consommation maison calculée |
-| Home Load Total | W | Consommation maison totale |
-| SolarVault AC Output | W | Sortie AC de la station → maison |
+| Home Power | W | Flux AC SolarVault → maison |
+| Domestic Load Power | W | Charges domestiques calculées |
+| Home Load Total | W | Consommation totale incluant EPS |
+| SolarVault AC Output | W | Sortie AC totale (maison + EPS) |
 | SolarVault AC Input | W | Entrée AC de la station ← réseau |
 | SolarVault AC Power | W | Bilan AC net (> 0 injecte, < 0 recharge) |
 | Backup Output Power | W | Puissance sortie EPS/backup |
@@ -141,6 +205,7 @@ Après ajout de l'intégration, ouvrir les **Options** pour mapper chaque flux �
 | Puissance de décharge batterie (W) | `sensor.jackery_battery_discharge_power_calc` |
 | Puissance nette batterie (W) | `sensor.jackery_battery_net_power` |
 | Import réseau Jackery (W) | `sensor.jackery_grid_import_power` |
+| Flux Maison SolarVault (W) | `sensor.jackery_home_power` |
 | Export réseau (W) | `sensor.jackery_grid_export_power` |
 | Sortie EPS/backup (W) | `sensor.jackery_eps_output_power` |
 | Énergie solaire totale (kWh) | `sensor.jackery_solar_energy` |
@@ -154,7 +219,7 @@ Les modifications d'options rechargent automatiquement l'intégration sans redé
 Les capteurs SolarGenflow sont compatibles avec le tableau de bord énergie natif de Home Assistant :
 
 - **Production solaire** → `sensor.solargenflow_solar_energy_total`
-- **Consommation maison** → `sensor.solargenflow_home_load`
+- **Charges domestiques** → `sensor.solargenflow_domestic_load_power`
 - **Import réseau** → `sensor.solargenflow_grid_import_power`
 - **Export réseau** → `sensor.solargenflow_grid_export_power`
 - **Batterie** → `sensor.solargenflow_battery_soc`

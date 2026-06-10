@@ -122,15 +122,28 @@ class SolarGenflowEngine:
     # ─── Flux SolarVault ──────────────────────────────────────────────────────
 
     @property
-    def solarvault_ac_output(self):
-        """Puissance envoyée par la SolarVault vers la maison (W, >= 0).
-        Source : sensor.jackery_home_power
+    def home_power(self):
+        """Flux AC SolarVault vers la maison (W, >= 0).
+
+        Source directe Jackery : sensor.jackery_home_power.
+        Ce n'est pas la consommation totale de la maison.
+        Les valeurs négatives très courtes sont des glitches MQTT et sont ignorées.
         """
         return max(self.get_float_state(
             self.get_option_entity(
-                "solarvault_output_entity", "sensor.jackery_home_power"
+                "home_power_entity", "sensor.jackery_home_power"
             )
         ), 0)
+
+    @property
+    def solarvault_ac_output(self):
+        """Sortie AC totale SolarVault (W, >= 0).
+
+        Formule : Home Power + Backup Output.
+        - home_power : flux AC SolarVault vers maison
+        - backup_output_power : sortie EPS / secours
+        """
+        return max(self.home_power + self.backup_output_power, 0)
 
     @property
     def solarvault_ac_input(self):
@@ -176,27 +189,22 @@ class SolarGenflowEngine:
     # ─── Consommation maison ──────────────────────────────────────────────────
 
     @property
-    def home_power(self):
-        """Consommation maison réelle (W).
+    def domestic_load_power(self):
+        """Charges domestiques calculées (W, >= 0).
 
-        Formule : Grid Import + SolarVault AC Output + Backup Output
-        - Grid Import  : ce que fournit EDF (mesuré par Shelly)
-        - SolarVault AC Output : ce que la SolarVault injecte dans la maison
-        - Backup Output : sortie EPS si active
-
-        Cette formule est valide dans tous les cas (SolarVault active,
-        inactive ou en recharge) car chaque source est mesurée indépendamment.
+        Formule validée : Grid Import + Home Power.
+        Correspond aux "Charges domestiques" affichées dans l'application Jackery,
+        hors sortie EPS / backup.
         """
-        return max(
-            self.grid_import_power
-            + self.solarvault_ac_output
-            + self.backup_output_power,
-            0,
-        )
+        return max(self.grid_import_power + self.home_power, 0)
 
     @property
     def home_load_total(self):
-        return self.home_power
+        """Consommation totale du site (W, >= 0).
+
+        Formule validée : Domestic Load Power + Backup Output.
+        """
+        return max(self.domestic_load_power + self.backup_output_power, 0)
 
     # ─── Divers ───────────────────────────────────────────────────────────────
 

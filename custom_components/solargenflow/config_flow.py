@@ -17,6 +17,7 @@ OPTIONS_SCHEMA = {
     "battery_net_entity":     "sensor.jackery_battery_net_power",
     "grid_import_entity":     "sensor.jackery_grid_import_power",
     "grid_export_entity":     "sensor.jackery_grid_export_power",
+    "home_power_entity":      "sensor.jackery_home_power",
     "solarvault_output_entity": "sensor.jackery_home_power",
     "solarvault_input_entity":  "sensor.jackery_grid_import_power",
     "backup_entity":          "sensor.jackery_eps_output_power",
